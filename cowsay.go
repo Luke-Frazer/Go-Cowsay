@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -81,6 +82,12 @@ func build_bubble(lines []string, maxWidth int) string {
 func main() {
 	var lines []string
 
+	var animal string
+
+	// allow the user to pass in a `-f <animal>` to print with, defaults to cow
+	flag.StringVar(&animal, "f", "cow", "Animal name you wish to print. Valid names are:\n'cow' | 'stegosaurus' | 'trex'\n")
+	flag.Parse()
+
 	info, err := os.Stdin.Stat()
 	if err != nil {
 		fmt.Printf("There was an error with your command, printing program\nERROR:\n%v", err)
@@ -91,7 +98,7 @@ func main() {
 	// if this is ran as a piped function, it will be empty (0), but if we dont, it will be a value.
 	if info.Mode()&os.ModeCharDevice != 0 {
 		fmt.Println("The command is intended to work with pipes.")
-		fmt.Println("Usage: echo <String> | gocowsay")
+		fmt.Println("Usage: echo <String> | ./cowsay")
 		os.Exit(0)
 	}
 
