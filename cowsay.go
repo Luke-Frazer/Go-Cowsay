@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -9,12 +10,40 @@ import (
 	"unicode/utf8"
 )
 
-var cow = ` \  ^__^
-  \ (oo)\_______
-    (__)\       )\/\
-        ||----w |
-        ||     ||
+func print_animal(name string) {
+
+	var cow = `         \  ^__^
+          \ (oo)\_______
+	    (__)\       )\/\
+	        ||----w |
+	        ||     ||
+		`
+
+	var stegosaurus = `         \                      .       .
+          \                    / ` + "`" + `.   .' "
+           \           .---.  <    > <    >  .---.
+            \          |    \  \ - ~ ~ - /  /    |
+          _____           ..-~             ~-..-~
+         |     |   \~~~\\.'                    ` + "`" + `./~~~/
+        ---------   \__/                         \__/
+       .'  O    \     /               /       \  "
+      (_____,    ` + "`" + `._.'               |         }  \/~~~/
+       ` + "`" + `----.          /       }     |        /    \__/
+             ` + "`" + `-.      |       /      |       /      ` + "`" + `. ,~~|
+                 ~-.__|      /_ - ~ ^|      /- _      ` + "`" + `..-'
+                      |     /        |     /     ~-.     ` + "`" + `-. _  _  _
+                      |_____|        |_____|         ~ - . _ _ _ _ _>
+
 	`
+	switch name {
+	case "cow":
+		fmt.Println(cow)
+	case "stegosaurus":
+		fmt.Println(stegosaurus)
+	default:
+		fmt.Println("Unknown Animal")
+	}
+}
 
 // converts all tabs in the list of strings to 4 spaces
 func tabs_to_spaces(lines []string) []string {
@@ -80,6 +109,11 @@ func build_bubble(lines []string, maxWidth int) string {
 
 func main() {
 	var lines []string
+	var animal string
+
+	// allow the user to pass in a `-f <animal>` to print with, defaults to cow
+	flag.StringVar(&animal, "f", "cow", "Animal name you wish to print. Valid names are\n`cow` | `stegosaurus`")
+	flag.Parse()
 
 	info, err := os.Stdin.Stat()
 	if err != nil {
@@ -116,6 +150,6 @@ func main() {
 	messages := normalize_string_length(lines, maxwidth)
 	balloon := build_bubble(messages, maxwidth)
 	fmt.Println(balloon)
-	fmt.Println(cow)
+	print_animal(animal)
 	fmt.Println()
 }
